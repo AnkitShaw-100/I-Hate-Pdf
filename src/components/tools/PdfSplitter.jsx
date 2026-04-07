@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+/* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 import { PDFDocument } from "pdf-lib";
 import { FileDown, Loader2, Upload, Scissors } from "lucide-react";
@@ -121,7 +122,7 @@ const PdfSplitter = () => {
       {/* Upload */}
       <motion.label
         htmlFor="pdf-split-input"
-        className="flex flex-col items-center justify-center w-full min-h-[200px] rounded-xl border-2 border-dashed border-muted-foreground/30 hover:border-primary/60 hover:bg-primary/5 cursor-pointer transition-all"
+        className="flex flex-col items-center justify-center w-full min-h-50 rounded-xl border-2 border-dashed border-muted-foreground/30 hover:border-primary/60 hover:bg-primary/5 cursor-pointer transition-all"
         whileHover={{ scale: 1.01 }}
       >
         <input
@@ -160,37 +161,62 @@ const PdfSplitter = () => {
               Extract Page Range
             </h3>
 
-            <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-3 flex-col sm:flex-row flex-wrap">
               <div className="flex items-center gap-2">
-                <label className="text-sm text-muted-foreground">From</label>
+                <label className="text-sm text-muted-foreground w-10">
+                  From
+                </label>
 
                 <input
                   type="number"
-                  min={1}
-                  max={pageCount}
                   value={splitFrom}
-                  onChange={(e) =>
-                    setSplitFrom(
-                      Math.max(1, Math.min(pageCount, Number(e.target.value)))
-                    )
-                  }
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "") {
+                      setSplitFrom("");
+                    } else {
+                      const num = Math.max(1, Math.min(pageCount, Number(val)));
+                      setSplitFrom(num);
+                      if (num > splitTo) setSplitTo(num);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const num = Math.max(
+                      1,
+                      Math.min(pageCount, Number(e.target.value) || 1)
+                    );
+                    setSplitFrom(num);
+                    if (num > splitTo) setSplitTo(num);
+                  }}
                   className="w-20 rounded-lg bg-secondary border border-border px-3 py-2 text-sm text-foreground font-heading"
                 />
               </div>
 
               <div className="flex items-center gap-2">
-                <label className="text-sm text-muted-foreground">To</label>
+                <label className="text-sm text-muted-foreground w-10">To</label>
 
                 <input
                   type="number"
-                  min={splitFrom}
-                  max={pageCount}
                   value={splitTo}
-                  onChange={(e) =>
-                    setSplitTo(
-                      Math.max(splitFrom, Math.min(pageCount, Number(e.target.value)))
-                    )
-                  }
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "") {
+                      setSplitTo("");
+                    } else {
+                      const num = Math.max(
+                        splitFrom,
+                        Math.min(pageCount, Number(val))
+                      );
+                      setSplitTo(num);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const num = Math.max(
+                      splitFrom,
+                      Math.min(pageCount, Number(e.target.value) || pageCount)
+                    );
+                    setSplitTo(num);
+                  }}
                   className="w-20 rounded-lg bg-secondary border border-border px-3 py-2 text-sm text-foreground font-heading"
                 />
               </div>

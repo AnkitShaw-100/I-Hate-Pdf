@@ -1,17 +1,20 @@
 import { X, GripVertical } from "lucide-react";
+import { motion } from "framer-motion";
 
-const ImagePreview = ({ 
-  file, 
-  url, 
-  index, 
-  onRemove, 
-  onDragStart, 
-  onDragOver, 
+const ImagePreview = ({
+  file,
+  url,
+  index,
+  onRemove,
+  onDragStart,
+  onDragOver,
   onDragEnd,
-  isDragging 
+  isDragging,
 }) => {
+  const MotionDiv = motion.div;
+
   return (
-    <motion.div
+    <MotionDiv
       layout
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -26,11 +29,7 @@ const ImagePreview = ({
       onDragEnd={() => onDragEnd?.()}
     >
       <div className="aspect-square relative">
-        <img
-          src={url}
-          alt={file.name}
-          className="w-full h-full object-cover"
-        />
+        <img src={url} alt={file.name} className="w-full h-full object-cover" />
 
         <div className="absolute inset-0 bg-background/0 group-hover:bg-background/40 transition-all duration-200" />
 
@@ -61,7 +60,7 @@ const ImagePreview = ({
           {(file.size / 1024).toFixed(0)} KB
         </p>
       </div>
-    </motion.div>
+    </MotionDiv>
   );
 };
 

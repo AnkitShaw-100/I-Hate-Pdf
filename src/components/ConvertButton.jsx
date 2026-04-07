@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 import { FileDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";

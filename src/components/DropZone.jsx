@@ -53,7 +53,7 @@ const DropZone = ({ onFilesAdded }) => {
   return (
     <motion.label
       htmlFor="file-input"
-      className={`relative flex flex-col items-center justify-center w-full min-h-[260px] rounded-xl border-2 border-dashed cursor-pointer transition-all duration-300 ${
+      className={`relative flex flex-col items-center justify-center w-full min-h-65 rounded-xl border-2 border-dashed cursor-pointer transition-all duration-300 ${
         isDragging
           ? "drop-zone-active border-primary"
           : "border-muted-foreground/30 hover:border-primary/60 hover:bg-primary/5"

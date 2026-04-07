@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+/* eslint-disable no-unused-vars */
 import { AnimatePresence, motion } from "framer-motion";
 import { jsPDF } from "jspdf";
 import { Trash2 } from "lucide-react";
@@ -40,18 +41,21 @@ const ImageToPdf = () => {
     setDraggedIndex(index);
   }, []);
 
-  const handleDragOver = useCallback((e, index) => {
-    e.preventDefault();
-    if (draggedIndex === null || draggedIndex === index) return;
+  const handleDragOver = useCallback(
+    (e, index) => {
+      e.preventDefault();
+      if (draggedIndex === null || draggedIndex === index) return;
 
-    const newImages = [...images];
-    const draggedImage = newImages[draggedIndex];
-    newImages.splice(draggedIndex, 1);
-    newImages.splice(index, 0, draggedImage);
+      const newImages = [...images];
+      const draggedImage = newImages[draggedIndex];
+      newImages.splice(draggedIndex, 1);
+      newImages.splice(index, 0, draggedImage);
 
-    setImages(newImages);
-    setDraggedIndex(index);
-  }, [draggedIndex, images]);
+      setImages(newImages);
+      setDraggedIndex(index);
+    },
+    [draggedIndex, images]
+  );
 
   const handleDragEnd = useCallback(() => {
     setDraggedIndex(null);
@@ -130,9 +134,7 @@ const ImageToPdf = () => {
               <p className="text-sm font-heading font-medium text-foreground">
                 {images.length} {images.length === 1 ? "image" : "images"}
               </p>
-              <p className="text-xs text-muted-foreground">
-                Drag to reorder
-              </p>
+              <p className="text-xs text-muted-foreground">Drag to reorder</p>
             </div>
 
             <Button
