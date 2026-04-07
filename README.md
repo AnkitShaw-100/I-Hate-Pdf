@@ -6,8 +6,6 @@ IHatePDF is a privacy-focused web application that provides essential PDF tools 
 
 - Image to PDF – Convert multiple images (JPG, PNG, etc.) into a single PDF file
 - PDF Splitter – Split PDF files into individual pages or selected ranges
-- Word to PDF – Convert Word documents (.docx) into PDF format
-- PDF to Word – Convert PDF files into editable Word documents
 
 ## Highlights
 
@@ -21,53 +19,39 @@ IHatePDF is a privacy-focused web application that provides essential PDF tools 
 
 ### Core
 
-- React
-- Vite
+- **React** – JavaScript library for building interactive user interfaces with component-based architecture
+- **Vite** – Fast frontend build tool and development server for optimized development experience
 
-### Routing and State
+### Routing
 
-- React Router DOM
-- TanStack React Query
+- **React Router DOM** – Client-side routing for seamless navigation between pages without full page reloads
 
 ### PDF Processing
 
-- jsPDF
-- pdf-lib
-- docx
-- file-saver
+- **jsPDF** – Library for generating PDFs from images and content in the browser
+- **pdf-lib** – Powerful PDF manipulation library for reading, splitting, and modifying PDF documents
 
-### UI and Styling
+### File Handling
 
-- Tailwind CSS
-- Radix UI
-- Base UI
-- class-variance-authority
-- clsx
-- tailwind-merge
+- **file-saver** – Utility for saving files directly to the user's device
 
-### Visuals and Interaction
+### UI Components and Styling
 
-- lucide-react
-- framer-motion
-- embla-carousel-react
-- recharts
+- **Tailwind CSS** – Utility-first CSS framework for rapid and responsive UI design
+- **Radix UI** – Unstyled, low-level UI component primitives for building accessible interfaces
+- **class-variance-authority** – Type-safe utility for managing component variant styles
+- **clsx** – JavaScript utility for conditionally joining classNames together
+- **tailwind-merge** – Utility to prevent Tailwind CSS class conflicts and merge them properly
 
-### Forms and Validation
+### Icons and Animations
 
-- react-hook-form
-- @hookform/resolvers
-- zod
+- **lucide-react** – Beautiful, consistent SVG icon library with React components
+- **framer-motion** – Animation library for creating smooth, interactive UI transitions and effects
 
-### Utilities
+### Notifications and Themes
 
-- sonner
-- next-themes
-- cmdk
-- vaul
-- react-day-picker
-- date-fns
-- input-otp
-- react-resizable-panels
+- **sonner** – Toast notification library for displaying success, error, and info messages
+- **next-themes** – Theme management system for implementing dark and light mode support
 
 ## Project Structure
 
