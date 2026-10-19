@@ -2,18 +2,20 @@ import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 
 const ThemeToggle = () => {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="p-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
-      aria-label="Toggle theme"
+      type="button"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="grid size-9 place-items-center rounded-full text-foreground/80 transition-colors hover:bg-fill hover:text-foreground"
+      aria-label={isDark ? "Switch to light appearance" : "Switch to dark appearance"}
     >
-      {theme === "dark" ? (
-        <Sun className="w-5 h-5" />
+      {isDark ? (
+        <Sun className="size-4.5" strokeWidth={1.75} />
       ) : (
-        <Moon className="w-5 h-5" />
+        <Moon className="size-4.5" strokeWidth={1.75} />
       )}
     </button>
   );

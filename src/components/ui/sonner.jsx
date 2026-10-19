@@ -28,7 +28,14 @@ const Toaster = ({ ...props }) => {
         "--normal-bg": "var(--popover)",
         "--normal-text": "var(--popover-foreground)",
         "--normal-border": "var(--border)",
-        "--border-radius": "var(--radius)",
+        "--border-radius": "14px",
+      }}
+      toastOptions={{
+        classNames: {
+          toast: "!font-sans !text-[15px] !shadow-[0_8px_30px_rgb(0_0_0/0.12)]",
+          success: "[&_[data-icon]]:!text-[#34c759]",
+          error: "[&_[data-icon]]:!text-destructive",
+        },
       }}
       {...props}
     />

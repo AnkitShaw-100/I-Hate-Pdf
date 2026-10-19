@@ -1,66 +1,100 @@
-import { X, GripVertical } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+/* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
+
+const formatSize = (bytes) =>
+  bytes >= 1024 * 1024
+    ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+    : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+
+// On devices with hover, controls appear on hover/focus; on touch they're always visible.
+const revealOnHover =
+  "opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 group-focus-within:opacity-100";
+
+const ControlButton = ({ label, onClick, disabled, children, tone = "default" }) => (
+  <button
+    type="button"
+    aria-label={label}
+    title={label}
+    onClick={onClick}
+    disabled={disabled}
+    className={`grid size-7 place-items-center rounded-full backdrop-blur-md transition disabled:opacity-0 ${
+      tone === "danger"
+        ? "bg-black/55 text-white hover:bg-destructive"
+        : "bg-black/55 text-white hover:bg-black/75"
+    }`}
+  >
+    {children}
+  </button>
+);
 
 const ImagePreview = ({
   file,
   url,
   index,
+  total,
   onRemove,
+  onMove,
   onDragStart,
   onDragOver,
   onDragEnd,
   isDragging,
 }) => {
-  const MotionDiv = motion.div;
-
   return (
-    <MotionDiv
+    <motion.li
       layout
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.8 }}
-      transition={{ type: "spring", stiffness: 300, damping: 25 }}
-      className={`group relative glass rounded-lg overflow-hidden glow-border cursor-move ${
-        isDragging ? "opacity-50 scale-95" : ""
-      }`}
+      initial={{ opacity: 0, scale: 0.94 }}
+      animate={{ opacity: isDragging ? 0.4 : 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.94 }}
+      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+      className="group relative list-none"
       draggable
-      onDragStart={() => onDragStart?.(index)}
+      onDragStart={(e) => {
+        e.dataTransfer.effectAllowed = "move";
+        onDragStart?.(index);
+      }}
       onDragOver={(e) => onDragOver?.(e, index)}
       onDragEnd={() => onDragEnd?.()}
     >
-      <div className="aspect-square relative">
-        <img src={url} alt={file.name} className="w-full h-full object-cover" />
+      <div className="relative aspect-square cursor-grab overflow-hidden rounded-2xl bg-fill active:cursor-grabbing">
+        <img
+          src={url}
+          alt={file.name}
+          draggable={false}
+          className="h-full w-full object-cover"
+        />
 
-        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/40 transition-all duration-200" />
+        <div className={`absolute inset-x-2 top-2 flex justify-between transition-opacity ${revealOnHover}`}>
+          <div className="flex gap-1">
+            <ControlButton
+              label={`Move ${file.name} earlier`}
+              onClick={() => onMove(index, index - 1)}
+              disabled={index === 0}
+            >
+              <ChevronLeft className="size-4" strokeWidth={2.25} />
+            </ControlButton>
+            <ControlButton
+              label={`Move ${file.name} later`}
+              onClick={() => onMove(index, index + 1)}
+              disabled={index === total - 1}
+            >
+              <ChevronRight className="size-4" strokeWidth={2.25} />
+            </ControlButton>
+          </div>
 
-        {/* Index badge */}
-        <div className="absolute top-2 left-2 w-7 h-7 rounded-full bg-primary flex items-center justify-center">
-          <span className="text-xs font-heading font-bold text-primary-foreground">
-            {index + 1}
-          </span>
+          <ControlButton label={`Remove ${file.name}`} onClick={() => onRemove(index)} tone="danger">
+            <X className="size-4" strokeWidth={2.25} />
+          </ControlButton>
         </div>
-
-        {/* Grip icon */}
-        <div className="absolute top-2 right-10 opacity-0 group-hover:opacity-100 transition-opacity">
-          <GripVertical className="w-5 h-5 text-foreground/80" />
-        </div>
-
-        {/* Remove button */}
-        <button
-          onClick={() => onRemove(index)}
-          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-destructive flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110"
-        >
-          <X className="w-4 h-4 text-destructive-foreground" />
-        </button>
       </div>
 
-      <div className="p-2">
-        <p className="text-xs text-muted-foreground truncate">{file.name}</p>
-        <p className="text-[10px] text-muted-foreground/60">
-          {(file.size / 1024).toFixed(0)} KB
+      <div className="mt-2 px-0.5">
+        <p className="text-[13px] font-medium text-foreground">Page {index + 1}</p>
+        <p className="truncate text-[12px] text-muted-foreground" title={file.name}>
+          {file.name} · {formatSize(file.size)}
         </p>
       </div>
-    </MotionDiv>
+    </motion.li>
   );
 };
 

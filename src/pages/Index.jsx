@@ -1,145 +1,116 @@
 import { useState } from "react";
 /* eslint-disable no-unused-vars */
-import { motion, AnimatePresence } from "framer-motion";
-import { FileImage, Scissors, Sparkles, FileText } from "lucide-react";
+import { Images, Lock, Scissors, Gift, Zap } from "lucide-react";
 
 import ImageToPdf from "@/components/tools/ImageToPdf";
 import PdfSplitter from "@/components/tools/PdfSplitter";
-import ThemeToggle from "@/components/ThemeToggle";
+import SegmentedControl from "@/components/SegmentedControl";
+import Navbar from "@/components/Navbar";
 
+// Tools share the brand colour for their icon and drop-zone illustration.
 const tools = [
   {
-    id: "img2pdf",
-    label: "Image → PDF",
-    icon: FileImage,
+    value: "img2pdf",
+    label: "Images to PDF",
+    icon: Images,
+    color: "var(--primary)",
     component: ImageToPdf,
   },
-  { id: "split", label: "Split PDF", icon: Scissors, component: PdfSplitter },
+  {
+    value: "split",
+    label: "Split PDF",
+    icon: Scissors,
+    color: "var(--primary)",
+    component: PdfSplitter,
+  },
+];
+
+const facts = [
+  {
+    icon: Lock,
+    title: "Stays on your device",
+    body: "Files are processed in your browser. Nothing is uploaded to a server.",
+  },
+  {
+    icon: Gift,
+    title: "Free, without the catch",
+    body: "No account, no watermark and no daily limit on how many files you convert.",
+  },
+  {
+    icon: Zap,
+    title: "Done in seconds",
+    body: "There’s no upload queue, so your PDF is ready as soon as you press the button.",
+  },
 ];
 
 export default function Index() {
   const [activeTool, setActiveTool] = useState("img2pdf");
+  const tool = tools.find((t) => t.value === activeTool) ?? tools[0];
 
-  const ActiveComponent =
-    tools.find((tool) => tool.id === activeTool)?.component ?? ImageToPdf;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
-      {/* Header */}
-      <header className="border-b border-border/50 glass sticky top-0 z-50">
-        <div className="container max-w-5xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="p-2 rounded-lg bg-destructive/10 border border-destructive/20 shrink-0">
-              <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-destructive" />
-            </div>
+    <div className="flex min-h-screen flex-col overflow-x-clip">
+      <Navbar />
 
-            <div className="min-w-0">
-              <h1 className="text-base sm:text-lg font-heading font-bold tracking-tight">
-                IHate<span className="text-destructive">PDF</span>
-              </h1>
-            </div>
+      <main className="mx-auto w-full max-w-245 flex-1 px-4 sm:px-6">
+        <section className="pt-10 pb-8 text-center sm:pt-14 sm:pb-10">
+          <h1 className="display mx-auto max-w-[14ch] pb-1 text-[40px] font-semibold text-balance sm:text-[56px] md:text-[64px]">
+            PDF tools that stay out of your way.
+          </h1>
+          <p className="mx-auto mt-4 max-w-[34rem] text-[17px] leading-[1.47] text-muted-foreground sm:text-[19px]">
+            Turn images into a PDF or split one into pages. Everything happens in your browser, so
+            your files never leave this device.
+          </p>
+        </section>
+
+        <div style={{ "--tool": tool.color }}>
+          <div className="flex justify-center">
+            <SegmentedControl
+              label="Choose a tool"
+              options={tools}
+              value={activeTool}
+              onChange={setActiveTool}
+            />
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <ThemeToggle />
-            <div className="hidden xs:flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
-              <span>Free & Private</span>
-            </div>
+          <div className="mt-6 sm:mt-8">
+            <section
+              aria-label={tool.label}
+              className="panel rounded-[28px] p-4 sm:p-8 md:p-10"
+            >
+              {/* Both tools stay mounted so switching keeps your files in place. */}
+              {tools.map(({ value, component: Tool }) => (
+                <div key={value} id={`tool-${value}`} hidden={activeTool !== value}>
+                  <Tool />
+                </div>
+              ))}
+            </section>
           </div>
         </div>
-      </header>
 
-      {/* Main */}
-      <main className="flex-1 container max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-8 md:py-12">
-        {/* Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8 sm:mb-10"
-        >
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-heading font-bold tracking-tight leading-tight">
-            Every PDF Tool You{" "}
-            <span className="text-destructive glow-text">Hate</span> to Need
-          </h2>
-
-          <p className="text-xs sm:text-sm md:text-base text-muted-foreground mt-3 sm:mt-4 max-w-lg mx-auto px-2">
-            Convert, split, and transform your files — entirely in your browser.
-            No uploads, no servers, no BS.
-          </p>
-        </motion.div>
-
-        {/* Tool Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-2 mb-8 sm:mb-10 px-1"
-        >
-          {tools.map((tool) => {
-            const Icon = tool.icon;
-            const isActive = activeTool === tool.id;
-
-            return (
-              <button
-                key={tool.id}
-                onClick={() => setActiveTool(tool.id)}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-heading font-medium transition-all whitespace-nowrap ${
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                    : "glass text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                }`}
+        <section aria-label="Why I Hate PDF" className="grid gap-10 py-20 sm:grid-cols-3 sm:gap-8 sm:py-28">
+          {facts.map(({ icon: Icon, title, body }) => (
+            <div key={title}>
+              <span
+                className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary"
               >
-                <Icon className="w-4 h-4" />
-                <span className="hidden xs:inline">{tool.label}</span>
-                <span className="inline xs:hidden">
-                  {tool.label.split("→")[0]}
-                </span>
-              </button>
-            );
-          })}
-        </motion.div>
-
-        {/* Active Tool */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTool}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.2 }}
-            className="mb-8 sm:mb-12"
-          >
-            <ActiveComponent />
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Features */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-12 sm:mt-16 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
-        >
-          {[
-            { title: "100% Private", desc: "Files never leave your browser" },
-            { title: "No Limits", desc: "Convert unlimited files" },
-            { title: "Instant Results", desc: "Get files in seconds" },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="glass rounded-lg sm:rounded-xl p-4 sm:p-5 text-center glow-border hover:bg-secondary/30 transition-colors"
-            >
-              <h3 className="font-heading font-semibold text-xs sm:text-sm">
-                {item.title}
-              </h3>
-              <p className="text-[10px] xs:text-xs sm:text-xs text-muted-foreground mt-1 sm:mt-2">
-                {item.desc}
+                <Icon className="size-5.5" strokeWidth={2} aria-hidden="true" />
+              </span>
+              <h2 className="mt-4 text-[19px] font-semibold tracking-[-0.02em]">{title}</h2>
+              <p className="mt-1.5 max-w-[30ch] text-[15px] leading-normal text-muted-foreground">
+                {body}
               </p>
             </div>
           ))}
-        </motion.div>
+        </section>
       </main>
+
+      <footer className="border-t border-hairline/60">
+        <div className="mx-auto flex max-w-245 flex-col gap-1 px-4 py-6 text-[12px] text-muted-foreground sm:flex-row sm:justify-between sm:px-6">
+          <p>Copyright © {new Date().getFullYear()} I Hate PDF.</p>
+          <p>Your files are processed locally and never stored.</p>
+        </div>
+      </footer>
     </div>
   );
 }
